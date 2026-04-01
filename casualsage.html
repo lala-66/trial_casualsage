@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CasualSage</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --paper: #f5f0e8;
+    --amber: #c8873a;
+    --teal: #3a7c7c;
+    --rust: #b85c38;
+    --pale: #e8e0d0;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    padding: 48px 24px;
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 10% 20%, rgba(200,135,58,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 80%, rgba(58,124,124,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  header {
+    margin-bottom: 56px;
+    border-bottom: 1px solid rgba(26,26,24,0.15);
+    padding-bottom: 32px;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(42px, 8vw, 68px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  .tagline {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(26,26,24,0.7);
+    max-width: 520px;
+    font-style: italic;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(184,92,56,0.25);
+  }
+
+  .problem-statement {
+    font-size: clamp(20px, 3.5vw, 26px);
+    font-weight: 300;
+    line-height: 1.55;
+    margin-bottom: 24px;
+  }
+
+  .problem-statement strong {
+    font-weight: 400;
+    color: var(--rust);
+  }
+
+  p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(26,26,24,0.85);
+    margin-bottom: 16px;
+  }
+
+  .tension-block {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 28px 32px;
+    margin: 32px 0;
+    position: relative;
+  }
+
+  .tension-block::before {
+    content: '"';
+    font-size: 80px;
+    line-height: 1;
+    color: var(--amber);
+    opacity: 0.4;
+    position: absolute;
+    top: 8px;
+    left: 24px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .tension-block p {
+    color: rgba(245,240,232,0.9);
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.65;
+    padding-left: 8px;
+    margin: 0;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 24px 0;
+    background: rgba(26,26,24,0.1);
+  }
+
+  .pillar {
+    background: var(--paper);
+    padding: 24px 20px;
+  }
+
+  .pillar-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--amber);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+
+  .pillar-title {
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .pillar-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(26,26,24,0.65);
+    margin: 0;
+  }
+
+  .examples-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 6px 12px;
+    border: 1px solid;
+    line-height: 1;
+  }
+
+  .tag-amber { border-color: var(--amber); color: var(--amber); }
+  .tag-teal { border-color: var(--teal); color: var(--teal); }
+  .tag-rust { border-color: var(--rust); color: var(--rust); }
+
+  .not-this {
+    border-left: 3px solid var(--rust);
+    padding: 16px 20px;
+    margin: 20px 0;
+    background: rgba(184,92,56,0.04);
+  }
+
+  .not-this p { margin: 0; font-style: italic; font-size: 16px; color: rgba(26,26,24,0.7); }
+
+  .yes-this {
+    border-left: 3px solid var(--teal);
+    padding: 16px 20px;
+    margin: 20px 0;
+    background: rgba(58,124,124,0.04);
+  }
+
+  .yes-this p { margin: 0; font-style: italic; font-size: 16px; color: rgba(26,26,24,0.7); }
+
+  .closing {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(26,26,24,0.15);
+    text-align: center;
+  }
+
+  .closing-question {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .closing p {
+    font-size: 14px;
+    color: rgba(26,26,24,0.5);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 480px) {
+    .pillars { grid-template-columns: 1fr; }
+    body { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="content">
+
+  <header>
+    <div class="eyebrow">Early stage · Berlin · 2025</div>
+    <h1>Casual<em>Sage</em></h1>
+    <p class="tagline">A platform for depth, genuine connection, and the transmission of practices that resist becoming products.</p>
+  </header>
+
+  <div class="section">
+    <div class="section-label">The Problem</div>
+    <p class="problem-statement">
+      The wellness industry extracts practices from their context and sells them back as <strong>frictionless experiences.</strong> Something essential is destroyed in the process.
+    </p>
+    <p>
+      A turmeric latte in a Berlin café is not the same as haldi doodh made by someone who knows you are sick. A kirtan concert is not the same as a temple tradition rooted in place and lineage. Concepts in yoga that can only be learnt through a body — not on a mat, not through an app — get reduced to sequences.
+    </p>
+    <p>
+      The problem is not the content. It is the <em>structure of transmission.</em> What survives the extraction and what doesn't.
+    </p>
+  </div>
+
+  <div class="tension-block">
+    <p>How do you build a platform for things that resist becoming a product — without destroying the very thing you are trying to protect?</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What We Are Working With</div>
+    <p>The board we are building from holds several territories simultaneously:</p>
+
+    <div class="examples-row">
+      <span class="tag tag-rust">Spiritual is political</span>
+      <span class="tag tag-rust">Psychedelics integration & art</span>
+      <span class="tag tag-rust">Narcotics Anonymous</span>
+      <span class="tag tag-rust">Drum as a feeling</span>
+    </div>
+
+    <div class="examples-row">
+      <span class="tag tag-amber">Concepts in yoga you can't learn on a mat</span>
+      <span class="tag tag-amber">How do you learn to care?</span>
+      <span class="tag tag-amber">Rituals — how do you teach this?</span>
+      <span class="tag tag-amber">Ragas / timeless meaning</span>
+      <span class="tag tag-amber">Topological spaces</span>
+      <span class="tag tag-amber">Embodied meaning → learn from someone who has it</span>
+      <span class="tag tag-amber">Fighting the attention economy</span>
+      <span class="tag tag-amber">What is the next level of consciousness?</span>
+    </div>
+
+    <div class="examples-row">
+      <span class="tag tag-teal">Beauty → healing → brings beauty</span>
+      <span class="tag tag-teal">Music as travel through time</span>
+      <span class="tag tag-teal">Poetry / wounds / healing</span>
+      <span class="tag tag-teal">Creating</span>
+      <span class="tag tag-teal">Naming a feeling</span>
+      <span class="tag tag-teal">Alternative medicines & witchcraft</span>
+      <span class="tag tag-teal">Art + holding + psychedelics</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">The Core Insight</div>
+    <p>
+      Genuine wellness — and genuine art — share a structural property: they have <em>holes that cannot be filled.</em> A grief ritual that works does not resolve the grief. A raga does not tell you what to feel. A koan does not give you the answer. The irreducible gap is not a flaw. It is load-bearing.
+    </p>
+    <p>
+      When a practice is commodified, the hole gets closed. The friction removed. The dependency on another person — someone who knows you, someone who carries the lineage — gets replaced by a clean user experience.
+    </p>
+    <p>
+      CasualSage is built on the premise that <strong>the friction is the medicine.</strong>
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What This Means as a Platform</div>
+
+    <div class="not-this">
+      <p>Not: another meditation app, wellness marketplace, or content platform that packages ancient wisdom into bite-sized modules.</p>
+    </div>
+
+    <div class="yes-this">
+      <p>Instead: a space where embodied knowledge is transmitted through genuine encounter — between people who carry a practice and people who need it — without stripping the context that makes it real.</p>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-title">Transmission over content</div>
+        <p class="pillar-body">Embodied meaning has to come from someone who has it. The platform facilitates encounter, not consumption.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-title">Context is preserved</div>
+        <p class="pillar-body">Practices stay connected to their origin — tradition, lineage, place, relationship. Not extracted and repackaged.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-title">Depth over reach</div>
+        <p class="pillar-body">Fighting the attention economy means building for genuine presence — not engagement metrics, not virality.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">04</div>
+        <div class="pillar-title">The full spectrum</div>
+        <p class="pillar-body">Ragas. Rituals. Poetry. Somatic practice. Psychedelic integration. Movement. Storytelling. The range is intentional — depth connects across forms.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Open Questions We Are Sitting With</div>
+    <p style="font-style:italic; color: rgba(26,26,24,0.65); font-size:16px; line-height:1.8;">
+      How do you teach a ritual?<br>
+      How do you learn to care?<br>
+      What is the next level of consciousness — and can a platform point toward it?<br>
+      Can design itself be an approach to wellness?<br>
+      What is drum as a feeling? Passion as a feeling? What kind of space holds that?
+    </p>
+  </div>
+
+  <div class="closing">
+    <p class="closing-question">What would it mean to build something that genuinely serves depth — without consuming it?</p>
+    <p>casualsage.com · early prototype · open for conversation</p>
+  </div>
+
+</div>
+</body>
+</html>
